@@ -1,58 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras import layers, models
 
 # Define the random values
 randomValues = np.array([-3.5, -1.2, 0, 3.2, -3.8, 1.7, -0.6, 3.3, -2.6, 5.6])
 
-# Sigmoid activation function
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+# Define the CNN model
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10, activation='softmax')
+])
 
-# Tanh activation function
-def tanh(x):
-    return np.tanh(x)
-
-# ReLU activation function
-def relu(x):
-    return np.maximum(0, x)
-
-# Leaky ReLU activation function
-def leakyRelu(x, alpha=0.1):
-    return np.maximum(alpha*x, x)
-
-# Generate x values for plotting
-x = np.linspace(-5, 5, 100)
-
-# Plotting
-plt.figure(figsize=(12, 8))
-
-# Sigmoid plot
-plt.subplot(2, 2, 1)
-plt.plot(x, sigmoid(x), label='Sigmoid')
-plt.scatter(randomValues, sigmoid(randomValues), color='red')
-plt.title('Sigmoid Activation Function')
-plt.legend()
-
-# Tanh plot
-plt.subplot(2, 2, 2)
-plt.plot(x, tanh(x), label='Tanh')
-plt.scatter(randomValues, tanh(randomValues), color='red')
-plt.title('Tanh Activation Function')
-plt.legend()
-
-# ReLU plot
-plt.subplot(2, 2, 3)
-plt.plot(x, relu(x), label='ReLU')
-plt.scatter(randomValues, relu(randomValues), color='red')
-plt.title('ReLU Activation Function')
-plt.legend()
-
-# Leaky ReLU plot
-plt.subplot(2, 2, 4)
-plt.plot(x, leakyRelu(x), label='Leaky ReLU')
-plt.scatter(randomValues, leakyRelu(randomValues), color='red')
-plt.title('Leaky ReLU Activation Function')
-plt.legend()
+# Print model summary
+model.summary()
 
 plt.tight_layout()
 plt.show()
